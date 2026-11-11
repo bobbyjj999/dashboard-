@@ -1,0 +1,1006 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0e0d0c">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Michi">
+<title>Robert's Michi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Inter:wght@300;400;500;600&family=Shippori+Mincho:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  color-scheme: dark;
+  --ink:#0e0d0c;
+  --ink-2:#151310;
+  --ink-3:#1c1915;
+  --line:rgba(236,228,212,.09);
+  --line-2:rgba(236,228,212,.16);
+  --paper:#ece4d4;
+  --paper-2:rgba(236,228,212,.68);
+  --muted:rgba(236,228,212,.42);
+  --red:#cf4a2f;
+  --red-soft:rgba(207,74,47,.14);
+  --gold:#b79b62;
+  --gold-soft:rgba(183,155,98,.16);
+  --serif:'Cormorant Garamond', 'Times New Roman', serif;
+  --sans:'Inter', system-ui, -apple-system, sans-serif;
+  --jp:'Shippori Mincho', 'Hiragino Mincho ProN', 'Yu Mincho', serif;
+  --r:3px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:64px;-webkit-text-size-adjust:100%}
+body{background:var(--ink);color:var(--paper);font-family:var(--sans);font-size:15px;line-height:1.55;min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.07;mix-blend-mode:screen;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .93 0 0 0 0 .89 0 0 0 0 .83 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
+body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;background:radial-gradient(120% 70% at 50% -10%, rgba(183,155,98,.07), transparent 60%)}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer;background:none;border:0}
+.wrap{position:relative;z-index:1;max-width:1160px;margin:0 auto;padding:0 18px 120px}
+
+/* Header */
+.hero{padding:48px 0 24px;display:grid;gap:26px}
+.hero-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px}
+.date{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted)}
+h1{font-family:var(--serif);font-weight:600;font-size:clamp(38px,9vw,60px);line-height:1;letter-spacing:.005em;margin-top:10px}
+h1 .michi{font-family:var(--jp);font-weight:700;color:var(--red);margin-left:.08em}
+.sub{font-family:var(--serif);font-style:italic;font-size:19px;color:var(--paper-2);margin-top:6px}
+.seal{flex:none;width:46px;height:46px;border:1.5px solid var(--red);color:var(--red);font-family:var(--jp);font-weight:700;display:grid;place-items:center;font-size:22px;border-radius:2px;transform:rotate(-3deg);opacity:.9;margin-top:4px}
+.verse{position:relative;display:grid;grid-template-columns:28px 1fr;gap:18px;padding:24px 0 6px}
+.verse blockquote{font-family:var(--serif);font-size:clamp(21px,5.2vw,28px);line-height:1.32;font-weight:500}
+.verse cite{display:flex;align-items:center;gap:12px;margin-top:14px;font-style:normal;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold)}
+.verse cite button{font-size:11px;letter-spacing:.14em;color:var(--muted);text-transform:uppercase;padding:6px 0}
+.verse cite button:hover{color:var(--paper)}
+.cross{width:28px;height:56px;margin-top:6px}
+
+/* Nav */
+.nav{position:sticky;top:0;z-index:20;margin:0 -18px;padding:10px 18px;background:rgba(14,13,12,.86);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line);display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
+.nav::-webkit-scrollbar{display:none}
+.nav a{flex:none;display:flex;align-items:baseline;gap:6px;padding:7px 12px;border:1px solid var(--line);border-radius:999px;color:var(--paper-2);text-decoration:none;font-size:12.5px;white-space:nowrap}
+.nav a span{font-family:var(--jp);color:var(--red);font-size:12px}
+.nav a:hover{border-color:var(--line-2);color:var(--paper)}
+
+/* Brush */
+.brush{display:block;width:100%;height:8px;margin:18px 0 20px;opacity:.5}
+.brush.short{width:72px;height:6px;margin:14px 0}
+
+/* Grid & cards */
+.grid{display:grid;gap:18px;margin-top:26px}
+.card{position:relative;background:linear-gradient(180deg,var(--ink-2),rgba(21,19,16,.6));border:1px solid var(--line);border-radius:var(--r);padding:24px 18px 22px;min-width:0}
+.sh{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+.sh .kj{font-family:var(--jp);font-weight:700;color:var(--red);font-size:15px;letter-spacing:.08em}
+.sh h2{font-family:var(--serif);font-weight:600;font-size:28px;line-height:1;letter-spacing:.01em}
+.sh .meta{margin-left:auto;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+h3{font-family:var(--serif);font-weight:600;font-size:19px;letter-spacing:.01em;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.label{font-family:var(--sans);font-weight:400;font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+.muted{color:var(--muted)}
+.dim{color:var(--paper-2)}
+.gold{color:var(--gold)}
+.red{color:var(--red)}
+.num{font-variant-numeric:tabular-nums;font-feature-settings:"tnum"}
+.big{font-weight:300;font-size:30px;line-height:1.05;letter-spacing:-.01em}
+.sub-block + .sub-block{margin-top:26px}
+.cols{display:grid;gap:26px}
+
+/* Stats */
+.stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px 14px}
+.stat .label{margin-bottom:4px}
+.ringrow{display:flex;align-items:center;gap:20px}
+.ring{position:relative;flex:none}
+.ring svg{display:block;overflow:visible}
+.ring .in{position:absolute;inset:0;display:grid;place-items:center;text-align:center}
+.ring .in b{display:block;font-weight:300;font-size:22px;line-height:1;font-variant-numeric:tabular-nums}
+.ring .in small{display:block;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-top:3px}
+
+/* Bars */
+.bar{height:3px;background:var(--line-2);border-radius:2px;overflow:hidden;margin-top:8px}
+.bar>i{display:block;height:100%;background:var(--red);border-radius:2px;transition:width .5s ease}
+.bar.gold>i{background:var(--gold)}
+.bar.soft>i{background:var(--paper-2)}
+.bar.over>i{background:var(--red)}
+
+/* Rows */
+.list{list-style:none}
+.row{display:flex;align-items:center;gap:12px;padding:11px 0;border-top:1px solid var(--line);min-height:48px}
+.row:first-child{border-top:0}
+.row .grow{flex:1;min-width:0}
+.row .t{display:block;overflow-wrap:anywhere}
+.row .s{display:block;font-size:12.5px;color:var(--muted);overflow-wrap:anywhere}
+.row.tap{cursor:pointer}
+.row.tap:hover .t{color:#fff}
+.done .t{color:var(--muted);text-decoration:line-through;text-decoration-color:var(--line-2)}
+
+/* Check */
+.chk{flex:none;width:26px;height:26px;border:1.5px solid var(--line-2);border-radius:50%;display:grid;place-items:center;transition:all .2s}
+.chk svg{width:14px;height:14px;opacity:0;transition:opacity .2s}
+.on .chk,.chk.on{border-color:var(--red);background:var(--red-soft)}
+.on .chk svg,.chk.on svg{opacity:1}
+button.row{width:100%;text-align:left}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:38px;padding:8px 14px;border:1px solid var(--line-2);border-radius:var(--r);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--paper-2);transition:all .2s;white-space:nowrap}
+.btn:hover{color:var(--paper);border-color:rgba(236,228,212,.35)}
+.btn.red{border-color:rgba(207,74,47,.55);color:#e8735a}
+.btn.red:hover{background:var(--red-soft);color:#f08a72}
+.btn.solid{background:var(--red);border-color:var(--red);color:#fff4ea}
+.btn.sm{min-height:30px;padding:5px 10px;font-size:10px}
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.add{font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);padding:6px 0 6px 10px;font-family:var(--sans);font-weight:500}
+.add:hover{color:var(--paper)}
+
+/* Habits */
+.habit{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;padding:12px 0;border-top:1px solid var(--line)}
+.habit:first-of-type{border-top:0}
+.dots{display:flex;gap:5px;margin-top:6px}
+.dots i{width:9px;height:9px;border-radius:50%;border:1px solid var(--line-2)}
+.dots i.f{background:var(--paper-2);border-color:transparent}
+.dots i.today{outline:1px solid var(--red);outline-offset:2px}
+.dots i.today.f{background:var(--red)}
+.streak{text-align:right}
+.streak b{display:block;font-weight:300;font-size:22px;line-height:1;font-variant-numeric:tabular-nums}
+.streak small{font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.weekhead{display:flex;gap:5px;margin-left:38px;font-size:9px;color:var(--muted);letter-spacing:.05em}
+.weekhead span{width:9px;text-align:center}
+
+/* Schedule */
+.day{padding:12px 0;border-top:1px solid var(--line);display:grid;grid-template-columns:54px 1fr;gap:12px}
+.day:first-child{border-top:0}
+.day .d{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);padding-top:3px}
+.day .d b{display:block;font-family:var(--serif);font-size:24px;letter-spacing:0;color:var(--paper);font-weight:500;line-height:1}
+.ev{display:flex;gap:10px;align-items:baseline;padding:3px 0;cursor:pointer}
+.ev:hover .t{color:#fff}
+.ev .tm{flex:none;width:118px;font-size:12.5px;color:var(--paper-2);font-variant-numeric:tabular-nums}
+.tag{display:inline-block;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;padding:1px 6px;border-radius:2px;margin-left:6px;vertical-align:2px;border:1px solid var(--line-2);color:var(--muted)}
+.tag.shift{border-color:rgba(183,155,98,.45);color:var(--gold)}
+.tag.church{border-color:rgba(207,74,47,.5);color:#e8735a}
+.today-block{padding:16px;border:1px solid var(--line);border-left:2px solid var(--red);background:rgba(236,228,212,.02);border-radius:var(--r)}
+.today-block .ev .tm{width:130px}
+.empty{color:var(--muted);font-style:italic;font-family:var(--serif);font-size:17px;padding:6px 0}
+
+/* Journal */
+textarea.journal{width:100%;min-height:120px;resize:vertical;background:transparent;border:0;border-left:1px solid var(--line-2);padding:4px 0 4px 14px;font-family:var(--serif);font-size:19px;line-height:1.45;color:var(--paper);outline:none}
+textarea.journal::placeholder{color:var(--muted);font-style:italic}
+textarea.journal:focus{border-left-color:var(--red)}
+.entry{padding:10px 0;border-top:1px solid var(--line)}
+.entry p{font-family:var(--serif);font-size:16.5px;color:var(--paper-2);line-height:1.4}
+
+/* Markets */
+.trade{display:grid;grid-template-columns:1fr auto;gap:2px 12px;padding:12px 0;border-top:1px solid var(--line);cursor:pointer}
+.trade:first-child{border-top:0}
+.trade .tk{font-weight:500;letter-spacing:.04em}
+.trade .pl{text-align:right;font-variant-numeric:tabular-nums;font-weight:500}
+.trade .meta{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+.trade .lesson{grid-column:1/-1;font-family:var(--serif);font-style:italic;font-size:15.5px;color:var(--paper-2);margin-top:4px}
+.pos{color:var(--gold)} .neg{color:#e0674c}
+.spark{display:block;width:100%;height:64px;margin-top:10px}
+
+/* Focus */
+.prio{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:center;padding:12px 0;border-top:1px solid var(--line)}
+.prio:first-child{border-top:0}
+.prio .n{font-family:var(--serif);font-size:30px;line-height:1;color:var(--red);width:22px;text-align:center}
+.prio input[type=text]{width:100%;background:transparent;border:0;border-bottom:1px solid transparent;padding:6px 0;font-size:16px;outline:none}
+.prio input[type=text]:focus{border-bottom-color:var(--line-2)}
+.prio.done input[type=text]{color:var(--muted);text-decoration:line-through}
+.prio-in{display:flex;align-items:center;gap:12px}
+.serve{margin-top:22px;padding:18px;border:1px solid rgba(183,155,98,.3);background:var(--gold-soft);border-radius:var(--r)}
+.serve .label{color:var(--gold)}
+.serve input{width:100%;background:transparent;border:0;outline:none;font-family:var(--serif);font-size:20px;padding:6px 0}
+
+/* Footer */
+footer{margin-top:54px;text-align:center;color:var(--muted)}
+footer .closing{font-family:var(--serif);font-style:italic;font-size:18px;color:var(--paper-2)}
+footer .btns{justify-content:center}
+
+/* Modal */
+dialog{margin:auto;width:min(520px,calc(100% - 24px));max-height:calc(100% - 24px);background:var(--ink-3);color:var(--paper);border:1px solid var(--line-2);border-radius:6px;padding:0}
+dialog::backdrop{background:rgba(5,5,4,.72);backdrop-filter:blur(3px)}
+.modal{padding:22px 20px 20px}
+.modal h3{font-size:24px;margin-bottom:16px}
+.field{display:grid;gap:6px;margin-bottom:14px}
+.field label{font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.field input,.field select,.field textarea{width:100%;background:var(--ink);border:1px solid var(--line-2);border-radius:var(--r);padding:11px 12px;font-size:16px;outline:none}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--red)}
+.field textarea{min-height:84px;resize:vertical}
+.field .hint{font-size:12px;color:var(--muted)}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.mbtns{display:flex;gap:8px;justify-content:flex-end;margin-top:8px}
+.mbtns .del{margin-right:auto}
+
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(20px);opacity:0;background:var(--ink-3);border:1px solid var(--line-2);padding:10px 16px;border-radius:999px;font-size:13px;z-index:50;transition:all .3s;pointer-events:none}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+@media (min-width:640px){
+  .wrap{padding:0 28px 120px}
+  .nav{margin:0 -28px;padding:10px 28px}
+  .card{padding:30px 28px 28px}
+  .stats{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .cols.two{grid-template-columns:1fr 1fr}
+}
+@media (min-width:960px){
+  .hero{grid-template-columns:1fr 1.1fr;align-items:end;padding:64px 0 34px;gap:48px}
+  .verse{padding:0}
+  .seal{display:none}
+  .grid{grid-template-columns:1fr 1fr;gap:22px}
+  .span2{grid-column:1/-1}
+  .cols.three{grid-template-columns:1.05fr 1fr 1fr;gap:40px}
+  .nav{justify-content:center}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+
+<!-- shared SVG defs: brush texture filter -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <filter id="brush" x="-10%" y="-10%" width="120%" height="120%">
+      <feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" seed="3" result="t"/>
+      <feDisplacementMap in="SourceGraphic" in2="t" scale="2.2" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <symbol id="brushline" viewBox="0 0 400 8" preserveAspectRatio="none">
+      <path d="M2 4.6 C 40 2.2, 120 2.6, 200 3.3 S 340 3.2, 398 2.4 C 340 5.2, 260 5.6, 200 5.3 S 60 6.2, 2 4.6 Z" fill="#ece4d4" filter="url(#brush)"/>
+    </symbol>
+    <symbol id="tick" viewBox="0 0 16 16"><path d="M3 8.5l3.2 3L13 4.5" fill="none" stroke="#ece4d4" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  </defs>
+</svg>
+
+<div class="wrap" id="app"></div>
+
+<dialog id="dlg"><form method="dialog" class="modal" id="dlgForm"></form></dialog>
+<div class="toast" id="toast"></div>
+
+<script>
+/* =========================================================
+   Robert's 道 — personal dashboard
+   All data lives in localStorage under KEY.
+   ========================================================= */
+const KEY = 'michi.v1';
+
+// ---------- date helpers ----------
+const pad = n => String(n).padStart(2,'0');
+const iso = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+const parse = s => { const [y,m,d] = s.split('-').map(Number); return new Date(y, m-1, d); };
+const addDays = (d, n) => { const x = new Date(d); x.setDate(x.getDate()+n); return x; };
+const TODAY = new Date(); TODAY.setHours(0,0,0,0);
+const T = iso(TODAY);
+const ago = n => iso(addDays(TODAY, -n));
+const ahead = n => iso(addDays(TODAY, n));
+const DOW = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+const MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const fmtShort = s => { const d = parse(s); return `${MON[d.getMonth()]} ${d.getDate()}`; };
+const monthKey = s => s.slice(0,7);
+const THIS_MONTH = monthKey(T);
+const fmtTime = t => { if(!t) return ''; let [h,m] = t.split(':').map(Number); const ap = h>=12?'PM':'AM'; h = h%12||12; return m ? `${h}:${pad(m)} ${ap}` : `${h} ${ap}`; };
+const uid = () => Math.random().toString(36).slice(2,9);
+
+// ---------- number helpers ----------
+const money = (n, dp=0) => (n<0?'−':'') + '$' + Math.abs(n).toLocaleString('en-US',{minimumFractionDigits:dp,maximumFractionDigits:dp});
+const signed = n => (n>=0?'+':'−') + '$' + Math.abs(n).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+const sum = (a, f = x => x) => a.reduce((s,x) => s + (Number(f(x))||0), 0);
+const clamp = (n, a=0, b=1) => Math.max(a, Math.min(b, n));
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+// ---------- verses ----------
+const VERSES = [
+  ['Be watchful, stand firm in the faith, act like men, be strong. Let all that you do be done in love.', '1 Corinthians 16:13–14'],
+  ['Be strong and courageous. Do not be frightened, and do not be dismayed, for the Lord your God is with you wherever you go.', 'Joshua 1:9'],
+  ['Iron sharpens iron, and one man sharpens another.', 'Proverbs 27:17'],
+  ['I can do all things through him who strengthens me.', 'Philippians 4:13'],
+  ['They who wait for the Lord shall renew their strength; they shall mount up with wings like eagles; they shall run and not be weary.', 'Isaiah 40:31'],
+  ['For God gave us a spirit not of fear but of power and love and self-control.', '2 Timothy 1:7'],
+  ['For the moment all discipline seems painful rather than pleasant, but later it yields the peaceful fruit of righteousness to those who have been trained by it.', 'Hebrews 12:11'],
+  ['Whatever you do, work heartily, as for the Lord and not for men.', 'Colossians 3:23'],
+  ['Commit your work to the Lord, and your plans will be established.', 'Proverbs 16:3'],
+  ['Finally, be strong in the Lord and in the strength of his might.', 'Ephesians 6:10'],
+  ['O Lord, in the morning you hear my voice; in the morning I prepare a sacrifice for you and watch.', 'Psalm 5:3'],
+  ['The plans of the diligent lead surely to abundance.', 'Proverbs 21:5'],
+  ['I discipline my body and keep it under control, lest after preaching to others I myself should be disqualified.', '1 Corinthians 9:27'],
+  ['The Lord is my strength and my shield; in him my heart trusts, and I am helped.', 'Psalm 28:7'],
+  ['Have I not commanded you? Be strong and courageous.', 'Joshua 1:9a'],
+  ['Even the Son of Man came not to be served but to serve, and to give his life as a ransom for many.', 'Mark 10:45'],
+  ['Trust in the Lord with all your heart, and do not lean on your own understanding. In all your ways acknowledge him, and he will make straight your paths.', 'Proverbs 3:5–6'],
+  ['Do you not know that in a race all the runners run, but only one receives the prize? So run that you may obtain it.', '1 Corinthians 9:24'],
+];
+const dayOfYear = Math.floor((TODAY - new Date(TODAY.getFullYear(),0,0)) / 864e5);
+let verseIdx = dayOfYear % VERSES.length;
+
+// ---------- reading plan ----------
+const PLAN_NAME = 'Foundations · John → Proverbs → Joshua';
+const PLAN = [
+  ...Array.from({length:21}, (_,i) => `John ${i+1}`),
+  ...Array.from({length:31}, (_,i) => `Proverbs ${i+1}`),
+  ...Array.from({length:24}, (_,i) => `Joshua ${i+1}`),
+];
+
+// ---------- sample data ----------
+function seed(){
+  // habits: pattern over the last 28 days
+  const H = ['pray','bible','early','gym','guitar'];
+  const habitLog = {};
+  const miss = { pray:[9,22], bible:[4,12,19], early:[2,6,13,17,24], guitar:[1,3,5,8,10,14,16,20,23,26] };
+  for(let i=1;i<=28;i++){
+    const d = ago(i), dow = parse(d).getDay(), set = [];
+    H.forEach(h => {
+      if(h==='gym'){ if([1,3,5].includes(dow) && i<20 || [1,2,4,5].includes(dow) && i>=20 ? (i!==11) : false) set.push(h); return; }
+      if(!(miss[h]||[]).includes(i)) set.push(h);
+    });
+    habitLog[d] = set;
+  }
+  habitLog[T] = ['pray','early'];
+
+  const prayers = {}; for(let i=0;i<10;i++) prayers[ago(i)] = i===0 ? [] : (i%3? ['midday','night'] : ['night']);
+
+  // church: Sundays attended
+  const lastSun = addDays(TODAY, -TODAY.getDay());
+  const church = [];
+  for(let w=0; w<9; w++){ if(w!==6) church.push(iso(addDays(lastSun, -7*w))); }
+
+  // schedule (relative to today)
+  const sched = [];
+  const S = (off, title, kind, start, end) => sched.push({id:uid(), date:ahead(off), title, kind, start, end});
+  for(let off=0; off<8; off++){
+    const dow = addDays(TODAY, off).getDay();
+    if(dow===0){ S(off,'Sunday service','church','10:30','12:00'); S(off,'Brunch shift','shift','12:45','17:00'); }
+    if(dow===1){ S(off,'Ground school — PHAK reading','study','09:00','11:00'); S(off,'Market review & watchlist','event','19:00','20:00'); }
+    if(dow===2){ S(off,'Lunch shift','shift','10:30','15:30'); S(off,'Guitar lesson','event','18:00','18:45'); }
+    if(dow===3){ S(off,'Lunch shift','shift','10:30','15:00'); S(off,'Leg day','gym','16:00','17:15'); S(off,'Wednesday night Bible study','church','19:00','20:30'); }
+    if(dow===4){ S(off,'Dinner shift','shift','16:00','22:30'); }
+    if(dow===5){ S(off,'Double — lunch','shift','10:30','15:00'); S(off,'Double — dinner','shift','16:30','23:00'); }
+    if(dow===6){ S(off,'Discovery-flight follow-up call · KBAZ','event','09:30','10:00'); S(off,'Dinner shift','shift','16:00','23:00'); }
+  }
+
+  // trades
+  const trades = [
+    {d:27,tk:'MES',m:'Futures',side:'Long', en:5912.25,ex:5921.50,q:2, pnl:92.50, l:'Waited for the VWAP reclaim instead of chasing. Patience paid.'},
+    {d:24,tk:'NVDA',m:'Stock',side:'Long', en:142.10,ex:139.85,q:20, pnl:-45.00, l:'Bought the open with no level. Wait 15 minutes. Every time.'},
+    {d:20,tk:'BTC',m:'Crypto',side:'Long', en:71240,ex:73010,q:0.02, pnl:35.40, l:'Sized small and slept fine. That is the right size.'},
+    {d:17,tk:'MNQ',m:'Futures',side:'Short',en:20844,ex:20871,q:2, pnl:-108.00, l:'Revenge trade after a loss. Rule: walk away after one red trade.'},
+    {d:13,tk:'SPY',m:'Stock',side:'Long', en:578.40,ex:582.15,q:15, pnl:56.25, l:'Followed the plan, took partials at 1R.'},
+    {d:9, tk:'ETH',m:'Crypto',side:'Short',en:2690,ex:2622,q:0.5, pnl:34.00, l:'Clean rejection at weekly resistance.'},
+    {d:6, tk:'MES',m:'Futures',side:'Long', en:5960.75,ex:5972.00,q:1, pnl:56.25, l:'A-setup only. Stopped trading after the win.'},
+    {d:3, tk:'TSLA',m:'Stock',side:'Short',en:251.30,ex:253.90,q:10, pnl:-26.00, l:'Fought the trend. Respect the higher timeframe.'},
+    {d:1, tk:'MES',m:'Futures',side:'Long', en:5988.50,ex:6001.25,q:2, pnl:127.50, l:'Best execution this month. Journal before and after.'},
+  ].map(t => ({id:uid(), date:ago(t.d), ticker:t.tk, market:t.m, side:t.side, entry:t.en, exit:t.ex, qty:t.q, pnl:t.pnl, lesson:t.l}));
+
+  // tips for this month, days before today
+  const tips = [];
+  const amt = [182,96,214,0,247,131,0,168,305,112,0,190,224,148,0,276,98,201,0,158,319,140,0,187,233,109,0,262,174,121,0];
+  for(let i=1; i<=31; i++){
+    const d = new Date(TODAY.getFullYear(), TODAY.getMonth(), i);
+    if(d >= TODAY || d.getMonth() !== TODAY.getMonth()) break;
+    if(amt[i-1]) tips.push({id:uid(), date:iso(d), amount:amt[i-1], note: d.getDay()===5 ? 'Double' : d.getDay()===4||d.getDay()===6 ? 'Dinner' : 'Lunch'});
+  }
+  const tipTotal = sum(tips, t=>t.amount);
+
+  const giving = [];
+  if(TODAY.getDate() > 2) giving.push({id:uid(), date:iso(new Date(TODAY.getFullYear(),TODAY.getMonth(),Math.min(2,TODAY.getDate()-1))), amount:Math.round(tipTotal*0.04), to:'Tithe · church'});
+  if(TODAY.getDate() > 9) giving.push({id:uid(), date:iso(new Date(TODAY.getFullYear(),TODAY.getMonth(),9)), amount:Math.round(tipTotal*0.03), to:'Tithe · church'});
+  giving.push({id:uid(), date:ago(1), amount:25, to:'Food bank'});
+
+  // training
+  const workouts = [];
+  const types = ['Push','Pull','Legs','Upper','Lower'];
+  for(let i=1;i<=28;i++){ if((habitLog[ago(i)]||[]).includes('gym')) workouts.push({id:uid(), date:ago(i), type:types[i%types.length], duration:55+(i%4)*10, notes:''}); }
+  const lift = (name, base, step) => ({id:uid(), name, entries: [35,28,21,14,7,2].map((d,k) => ({date:ago(d), weight: base + step*k, reps: 5}))});
+  const lifts = [lift('Bench Press',165,5), lift('Back Squat',205,10), lift('Deadlift',245,10), lift('Overhead Press',105,2.5)];
+  const bw = [42,38,35,31,28,24,21,17,14,10,7,3,0].map((d,k) => ({id:uid(), date:ago(d), weight: +(186.4 - k*0.42 + (k%3===1?0.6:0)).toFixed(1)}));
+
+  return {
+    v:1,
+    habits:[
+      {id:'pray', name:'Morning prayer'},
+      {id:'bible', name:'Bible reading'},
+      {id:'early', name:'Up by 5:30 AM'},
+      {id:'gym', name:'Gym'},
+      {id:'guitar', name:'Guitar practice'},
+    ],
+    habitLog,
+    faith:{
+      prayers,
+      planDone:14,
+      planLog:{[ago(1)]:13},
+      journal:{
+        [ago(1)]:'Proverbs 1 — the fear of the Lord is the beginning of knowledge. Discipline isn’t just grinding; it starts with humility. Listen before I act.',
+        [ago(3)]:'Got short with a table tonight. God reminded me that serving well is serving Him. Colossians 3:23.',
+        [ago(6)]:'John 13 — Jesus washed feet. Leadership looks like service. If I run a company one day, that’s the standard.',
+      },
+      requests:[
+        {id:uid(), text:'Wisdom and patience with trading — that it serves my goals, not my ego', who:'Me', answered:false, date:ago(12)},
+        {id:uid(), text:'Mom’s health and her upcoming appointment', who:'Family', answered:false, date:ago(8)},
+        {id:uid(), text:'A coworker going through a hard breakup', who:'Work', answered:false, date:ago(5)},
+        {id:uid(), text:'Find a men’s group / mentor at church', who:'Me', answered:true, date:ago(30)},
+      ],
+      church,
+    },
+    schedule:sched,
+    flight:{
+      savingsGoal:14000, hoursGoal:40,
+      deposits:[{date:ago(70),amount:500},{date:ago(56),amount:400},{date:ago(42),amount:350},{date:ago(28),amount:450},{date:ago(14),amount:340},{date:ago(4),amount:300}].map(x=>({id:uid(),...x})),
+      log:[{id:uid(), date:ago(38), hours:1.2, note:'Discovery flight · C172 · KBAZ'}],
+      milestones:[
+        {id:uid(), text:'Discovery flight', done:true},
+        {id:uid(), text:'FAA 3rd-class medical', done:false},
+        {id:uid(), text:'Student pilot certificate (IACRA)', done:false},
+        {id:uid(), text:'Pass FAA written (PAR)', done:false},
+        {id:uid(), text:'First solo', done:false},
+        {id:uid(), text:'Private Pilot checkride', done:false},
+        {id:uid(), text:'Instrument → Commercial → Charter (Part 135)', done:false},
+      ],
+      study:[
+        {id:uid(), text:'PHAK ch. 1–3 · Aeronautical decision-making, aircraft structure', done:true},
+        {id:uid(), text:'PHAK ch. 4–6 · Principles of flight, aerodynamics, controls', done:false},
+        {id:uid(), text:'Airspace classes & sectional charts', done:false},
+        {id:uid(), text:'Weather theory & reports (METAR / TAF)', done:false},
+        {id:uid(), text:'FAR/AIM · Part 61 & Part 91 basics', done:false},
+        {id:uid(), text:'Radio communications practice', done:false},
+      ],
+    },
+    trades,
+    money:{
+      wages:186,
+      budget:[
+        {id:uid(), name:'Rent', budget:750, spent:750},
+        {id:uid(), name:'Groceries', budget:300, spent:212},
+        {id:uid(), name:'Gas', budget:160, spent:118},
+        {id:uid(), name:'Car insurance', budget:140, spent:140},
+        {id:uid(), name:'Phone', budget:65, spent:65},
+        {id:uid(), name:'Eating out', budget:120, spent:131},
+        {id:uid(), name:'Gym membership', budget:25, spent:25},
+        {id:uid(), name:'Fun', budget:80, spent:34},
+      ],
+      tips,
+      savingsName:'Emergency fund', savingsGoal:3000, saved:1450,
+      tithePct:10,
+      giving,
+    },
+    training:{ weeklyGoal:4, workouts, lifts, bodyweight:bw },
+    focus:{
+      week: weekStart(TODAY),
+      priorities:[
+        {text:'Finish PHAK chapter 4 and the end-of-chapter quiz', done:false},
+        {text:'Gym 4× this week — no skipped mornings', done:false},
+        {text:'Journal every trade before market close', done:true},
+      ],
+      serve:{text:'Cover a coworker’s Saturday side-work so they can make their kid’s game', done:false},
+    },
+  };
+}
+function weekStart(d){ const x = new Date(d); x.setDate(x.getDate() - ((x.getDay()+6)%7)); return iso(x); } // Monday
+
+// ---------- persistence ----------
+let S;
+function load(){
+  try { const raw = localStorage.getItem(KEY); if(raw) return JSON.parse(raw); } catch(e){}
+  return seed();
+}
+function save(){ try { localStorage.setItem(KEY, JSON.stringify(S)); } catch(e){} }
+S = load();
+
+// ---------- derived ----------
+const habitDone = (d, h) => (S.habitLog[d]||[]).includes(h);
+function toggleHabit(d, h, force){
+  const set = new Set(S.habitLog[d]||[]);
+  const on = force ?? !set.has(h);
+  on ? set.add(h) : set.delete(h);
+  S.habitLog[d] = [...set];
+}
+function streak(test){
+  let n = 0, i = test(T) ? 0 : 1;
+  while(test(ago(i))){ n++; i++; if(i>3650) break; }
+  return n;
+}
+function churchStreak(){
+  const set = new Set(S.faith.church);
+  let sun = addDays(TODAY, -TODAY.getDay()), n = 0;
+  if(!set.has(iso(sun)) && TODAY.getDay()===0) sun = addDays(sun,-7);
+  while(set.has(iso(sun))){ n++; sun = addDays(sun,-7); }
+  return n;
+}
+const isPrayed = (d, slot) => slot==='morning' ? habitDone(d,'pray') : (S.faith.prayers[d]||[]).includes(slot);
+
+// ---------- SVG components ----------
+// Ensō ring: an open brush circle. pct 0..1
+function enso(pct, size=96, inner='', sub='', color='var(--red)'){
+  const r = 42, c = 2*Math.PI*r, p = clamp(pct);
+  const len = Math.max(p*c*0.94, p>0 ? 2 : 0); // keep ensō open — never fully closes
+  return `<div class="ring" style="width:${size}px;height:${size}px">
+    <svg viewBox="0 0 100 100" width="${size}" height="${size}" aria-hidden="true">
+      <circle cx="50" cy="50" r="${r}" fill="none" stroke="rgba(236,228,212,.10)" stroke-width="2.2" stroke-dasharray="${c*0.94} ${c}" transform="rotate(-80 50 50)" filter="url(#brush)"/>
+      <circle cx="50" cy="50" r="${r}" fill="none" stroke="${color}" stroke-width="4.4" stroke-linecap="round" stroke-dasharray="${len} ${c}" transform="rotate(-80 50 50)" filter="url(#brush)" style="transition:stroke-dasharray .6s ease"/>
+    </svg>
+    <div class="in"><div><b>${inner}</b>${sub?`<small>${sub}</small>`:''}</div></div>
+  </div>`;
+}
+const brush = (cls='') => `<svg class="brush ${cls}" aria-hidden="true"><use href="#brushline"/></svg>`;
+const tick = `<svg><use href="#tick"/></svg>`;
+const crossSVG = (cls='cross') => `<svg class="${cls}" viewBox="0 0 28 56" aria-hidden="true">
+  <path d="M13.2 2.5 C14.6 1.6 15.8 2.4 15.6 4 L15 52.5 C14.9 54.2 12.9 54.4 12.7 52.6 L12.4 4.6 C12.4 3.6 12.6 2.9 13.2 2.5Z" fill="var(--red)" filter="url(#brush)"/>
+  <path d="M3 17.6 C2 16.6 2.8 15.4 4.2 15.5 L24.6 16.2 C26.2 16.3 26.3 18.1 24.6 18.3 L4.4 18.6 C3.8 18.6 3.3 18.2 3 17.6Z" fill="var(--red)" filter="url(#brush)"/>
+</svg>`;
+function spark(vals, {h=64, w=300, color='var(--paper-2)', zero=false}={}){
+  if(vals.length < 2) return '';
+  const min = Math.min(...vals, zero?0:Infinity), max = Math.max(...vals, zero?0:-Infinity);
+  const span = (max-min)||1, px = i => (i/(vals.length-1))*(w-8)+4, py = v => h-6 - ((v-min)/span)*(h-12);
+  const pts = vals.map((v,i)=>`${px(i).toFixed(1)},${py(v).toFixed(1)}`).join(' ');
+  const last = vals.length-1;
+  const zl = zero && min<0 && max>0 ? `<line x1="0" x2="${w}" y1="${py(0)}" y2="${py(0)}" stroke="rgba(236,228,212,.14)" stroke-dasharray="2 4"/>` : '';
+  return `<svg class="spark" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" aria-hidden="true">${zl}
+    <polyline points="${pts}" fill="none" stroke="${color}" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke"/>
+    <circle cx="${px(last)}" cy="${py(vals[last])}" r="3" fill="var(--red)"/></svg>`;
+}
+const bar = (pct, cls='') => `<div class="bar ${cls}"><i style="width:${(clamp(pct)*100).toFixed(1)}%"></i></div>`;
+const sectionHead = (kj, name, meta='') => `<div class="sh"><span class="kj">${kj}</span><h2>${name}</h2>${meta?`<span class="meta">${meta}</span>`:''}</div>${brush()}`;
+
+// ---------- render ----------
+function render(){
+  // auto-roll the weekly focus when a new week begins
+  const wk = weekStart(TODAY);
+  if(S.focus.week !== wk){ S.focus.week = wk; S.focus.priorities.forEach(p=>p.done=false); S.focus.serve.done=false; save(); }
+
+  const [vt, vr] = VERSES[verseIdx];
+  const dateStr = TODAY.toLocaleDateString('en-US',{weekday:'long', month:'long', day:'numeric', year:'numeric'});
+  document.getElementById('app').innerHTML = `
+    <header class="hero">
+      <div>
+        <div class="hero-top">
+          <div>
+            <div class="date">${dateStr}</div>
+            <h1>Robert's<span class="michi">道</span></h1>
+            <div class="sub">Michi — The Way</div>
+          </div>
+          <div class="seal" title="Michi">道</div>
+        </div>
+      </div>
+      <div class="verse">
+        ${crossSVG()}
+        <div>
+          <blockquote>“${esc(vt)}”</blockquote>
+          <cite>${esc(vr)} <button data-act="nextVerse" aria-label="Show another verse">Another →</button></cite>
+        </div>
+      </div>
+    </header>
+    <nav class="nav" aria-label="Sections">
+      ${[['faith','信','Faith'],['schedule','予','Schedule'],['habits','習','Habits'],['flight','飛','Flight'],['markets','相','Markets'],['money','財','Money'],['training','鍛','Training'],['focus','目','Focus']]
+        .map(([id,k,n])=>`<a href="#${id}"><span>${k}</span>${n}</a>`).join('')}
+    </nav>
+    <main class="grid">
+      ${renderFaith()}
+      ${renderSchedule()}
+      ${renderHabits()}
+      ${renderFlight()}
+      ${renderMarkets()}
+      ${renderMoney()}
+      ${renderTraining()}
+      ${renderFocus()}
+    </main>
+    <footer>
+      ${brush('short')}
+      <p class="closing">“Commit your work to the Lord, and your plans will be established.”</p>
+      <p class="label" style="margin-top:8px">Proverbs 16:3</p>
+      <div class="btns" style="margin-top:28px">
+        <button class="btn sm" data-act="export">Export data</button>
+        <button class="btn sm" data-act="import">Import</button>
+        <button class="btn sm" data-act="reset">Reset to sample</button>
+      </div>
+      <p class="muted" style="font-size:12px;margin-top:14px">Saved on this device automatically.</p>
+    </footer>`;
+}
+
+function renderFaith(){
+  const f = S.faith;
+  const slots = [['morning','Morning prayer','Before the phone. First words to God.'],['midday','Midday pause','A breath and a prayer between tables.'],['night','Night prayer','Gratitude, confession, tomorrow.']];
+  const prayedToday = slots.filter(s=>isPrayed(T,s[0])).length;
+  const readToday = f.planLog && Object.prototype.hasOwnProperty.call(f.planLog, T);
+  const next = PLAN[f.planDone];
+  const journalToday = f.journal[T] || '';
+  const past = Object.entries(f.journal).filter(([d])=>d!==T).sort((a,b)=>b[0].localeCompare(a[0])).slice(0,3);
+  const open = f.requests.filter(r=>!r.answered), answered = f.requests.filter(r=>r.answered);
+  const cs = churchStreak();
+  const lastSun = iso(addDays(TODAY, -TODAY.getDay()));
+  const attendedLast = f.church.includes(lastSun);
+  const prayStreak = streak(d=>isPrayed(d,'morning'));
+
+  return `<section class="card span2" id="faith">
+    ${sectionHead('信仰','Faith', 'God first')}
+    <div class="cols three">
+      <div>
+        <div class="sub-block">
+          <h3>Prayer <span class="label">${prayedToday}/3 today</span></h3>
+          <ul class="list">
+            ${slots.map(([k,n,s])=>`<li><button class="row ${isPrayed(T,k)?'on done':''}" data-act="pray" data-slot="${k}">
+              <span class="chk">${tick}</span><span class="grow"><span class="t">${n}</span><span class="s">${s}</span></span></button></li>`).join('')}
+          </ul>
+        </div>
+        <div class="sub-block">
+          <div class="stats" style="grid-template-columns:1fr 1fr">
+            <div class="stat"><div class="label">Prayer streak</div><div class="big num">${prayStreak}<span class="muted" style="font-size:14px"> days</span></div></div>
+            <div class="stat"><div class="label">Church streak</div><div class="big num">${cs}<span class="muted" style="font-size:14px"> Sundays</span></div></div>
+          </div>
+          <div class="btns">
+            <button class="btn ${attendedLast?'':'red'}" data-act="church">${attendedLast?'✓ At church ' + fmtShort(lastSun):'I was at church Sunday'}</button>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="sub-block">
+          <h3>Reading plan</h3>
+          <div class="ringrow">
+            ${enso(f.planDone/PLAN.length, 100, `${Math.round(f.planDone/PLAN.length*100)}%`, `${f.planDone}/${PLAN.length}`)}
+            <div>
+              <div class="label">${esc(PLAN_NAME)}</div>
+              <div style="font-family:var(--serif);font-size:24px;margin-top:6px">${readToday ? 'Read today ✓' : next ? esc(next) : 'Plan complete'}</div>
+              <div class="muted" style="font-size:12.5px">${readToday ? (next?`Up next: ${esc(next)}`:'') : 'Today’s reading'}</div>
+            </div>
+          </div>
+          <div class="btns">
+            ${readToday ? `<button class="btn sm" data-act="unread">Undo</button>` : next ? `<button class="btn solid" data-act="read">Mark ${esc(next)} read</button>` : ''}
+          </div>
+        </div>
+        <div class="sub-block">
+          <h3>What is God teaching me?</h3>
+          <textarea class="journal" id="journal" placeholder="Write a line or two…">${esc(journalToday)}</textarea>
+          <div class="btns" style="margin-top:8px"><button class="btn sm" data-act="saveJournal">Save reflection</button></div>
+          ${past.length?`<div style="margin-top:14px">${past.map(([d,t])=>`<div class="entry"><div class="label">${fmtShort(d)}</div><p>${esc(t)}</p></div>`).join('')}</div>`:''}
+        </div>
+      </div>
+      <div>
+        <div class="sub-block">
+          <h3>Prayer requests <button class="add" data-act="addRequest">+ Add</button></h3>
+          <ul class="list">
+            ${open.map(r=>`<li class="row"><button class="chk" data-act="answer" data-id="${r.id}" aria-label="Mark answered">${tick}</button>
+              <span class="grow tap" data-act="editRequest" data-id="${r.id}" style="cursor:pointer"><span class="t">${esc(r.text)}</span><span class="s">${esc(r.who)} · since ${fmtShort(r.date)}</span></span></li>`).join('') || '<li class="empty">Bring something to Him.</li>'}
+          </ul>
+          ${answered.length?`<div class="label gold" style="margin-top:18px">Answered · praise</div>
+          <ul class="list">${answered.map(r=>`<li class="row on done"><button class="chk" data-act="answer" data-id="${r.id}" aria-label="Mark unanswered">${tick}</button><span class="grow"><span class="t">${esc(r.text)}</span></span></li>`).join('')}</ul>`:''}
+        </div>
+      </div>
+    </div>
+  </section>`;
+}
+
+function renderSchedule(){
+  const items = S.schedule.slice().sort((a,b)=>(a.date+a.start).localeCompare(b.date+b.start));
+  const byDay = d => items.filter(i=>i.date===d);
+  const ev = i => `<div class="ev" data-act="editEvent" data-id="${i.id}"><span class="tm">${fmtTime(i.start)}${i.end?' – '+fmtTime(i.end):''}</span><span class="t">${esc(i.title)}${i.kind==='shift'?'<span class="tag shift">Shift</span>':i.kind==='church'?'<span class="tag church">Church</span>':''}</span></div>`;
+  const todays = byDay(T);
+  const hoursToday = sum(todays.filter(i=>i.kind==='shift'), i=>hrs(i));
+  const week = Array.from({length:7},(_,k)=>ahead(k+1));
+  const weekShifts = items.filter(i=>i.kind==='shift' && i.date>T && i.date<=ahead(7));
+  return `<section class="card" id="schedule">
+    ${sectionHead('予定','Schedule', `${weekShifts.length} shifts · ${sum(weekShifts,hrs).toFixed(1)} h ahead`)}
+    <div class="today-block">
+      <div class="label red" style="margin-bottom:8px">Today${hoursToday?` · ${hoursToday.toFixed(1)} h on the floor`:''}</div>
+      ${todays.map(ev).join('') || '<div class="empty">Nothing scheduled. Rest well.</div>'}
+    </div>
+    <div style="margin-top:14px">
+      ${week.map(d=>{ const dt = parse(d), list = byDay(d);
+        return `<div class="day"><div class="d">${DOW[dt.getDay()]}<b>${dt.getDate()}</b></div><div>${list.map(ev).join('') || '<span class="muted" style="font-size:13px">Off</span>'}</div></div>`; }).join('')}
+    </div>
+    <div class="btns"><button class="btn red" data-act="addEvent">+ Add shift or event</button></div>
+  </section>`;
+}
+function hrs(i){ if(!i.start||!i.end) return 0; const [a,b]=i.start.split(':').map(Number), [c,d]=i.end.split(':').map(Number); return Math.max(0,(c*60+d-a*60-b)/60); }
+
+function renderHabits(){
+  const days = Array.from({length:7},(_,k)=>ago(6-k));
+  const doneToday = S.habits.filter(h=>habitDone(T,h.id)).length;
+  // 28-day consistency
+  let tot=0, hit=0; for(let i=0;i<28;i++){ S.habits.forEach(h=>{ tot++; if(habitDone(ago(i),h.id)) hit++; }); }
+  return `<section class="card" id="habits">
+    ${sectionHead('習慣','Habits', `${Math.round(hit/tot*100)}% · 28 days`)}
+    <div class="ringrow" style="margin-bottom:18px">
+      ${enso(doneToday/S.habits.length, 92, `${doneToday}/${S.habits.length}`, 'today')}
+      <div><div style="font-family:var(--serif);font-size:21px;line-height:1.25">${doneToday===S.habits.length?'All done. Well fought.':doneToday?'Keep going. Finish the day strong.':'The day is waiting. Start with prayer.'}</div>
+      <div class="muted" style="font-size:12.5px;margin-top:4px">Tap a circle to check off today.</div></div>
+    </div>
+    <div class="weekhead">${days.map(d=>`<span>${DOW[parse(d).getDay()][0]}</span>`).join('')}</div>
+    ${S.habits.map(h=>{ const on = habitDone(T,h.id), st = streak(d=>habitDone(d,h.id));
+      return `<div class="habit ${on?'on':''}">
+        <button class="chk" data-act="habit" data-id="${h.id}" aria-label="Toggle ${esc(h.name)}">${tick}</button>
+        <div><div>${esc(h.name)}</div><div class="dots">${days.map(d=>`<i class="${habitDone(d,h.id)?'f':''} ${d===T?'today':''}"></i>`).join('')}</div></div>
+        <div class="streak"><b>${st}</b><small>streak</small></div>
+      </div>`; }).join('')}
+  </section>`;
+}
+
+function renderFlight(){
+  const f = S.flight;
+  const saved = sum(f.deposits, d=>d.amount), hours = sum(f.log, l=>l.hours);
+  const next = f.milestones.find(m=>!m.done);
+  const studyDone = f.study.filter(s=>s.done).length;
+  return `<section class="card" id="flight">
+    ${sectionHead('飛行','Flight Path', 'Private Pilot → Charter')}
+    <div class="ringrow">
+      ${enso(saved/f.savingsGoal, 108, money(saved), `of ${money(f.savingsGoal)}`, 'var(--gold)')}
+      <div style="flex:1;min-width:0">
+        <div class="label">Flight hours</div>
+        <div class="big num">${hours.toFixed(1)} <span class="muted" style="font-size:14px">/ ${f.hoursGoal} h</span></div>
+        ${bar(hours/f.hoursGoal)}
+        <div class="label" style="margin-top:16px">Next milestone</div>
+        <div style="font-family:var(--serif);font-size:20px;line-height:1.2;margin-top:2px">${next?esc(next.text):'Captain. Go build the company.'}</div>
+      </div>
+    </div>
+    <div class="btns">
+      <button class="btn red" data-act="addDeposit">+ Savings</button>
+      <button class="btn" data-act="addHours">+ Log hours</button>
+      <button class="btn sm" data-act="flightGoals">Goals</button>
+    </div>
+    <div class="sub-block" style="margin-top:26px">
+      <h3>Milestones</h3>
+      <ul class="list">${f.milestones.map(m=>`<li><button class="row ${m.done?'on done':''}" data-act="toggleMs" data-id="${m.id}"><span class="chk">${tick}</span><span class="grow"><span class="t">${esc(m.text)}</span></span></button></li>`).join('')}</ul>
+    </div>
+    <div class="sub-block">
+      <h3>Ground study <span class="label">${studyDone}/${f.study.length} <button class="add" data-act="addStudy">+ Add</button></span></h3>
+      ${bar(studyDone/f.study.length,'soft')}
+      <ul class="list" style="margin-top:8px">${f.study.map(m=>`<li><button class="row ${m.done?'on done':''}" data-act="toggleStudy" data-id="${m.id}"><span class="chk">${tick}</span><span class="grow"><span class="t">${esc(m.text)}</span></span></button></li>`).join('')}</ul>
+    </div>
+  </section>`;
+}
+
+function renderMarkets(){
+  const tr = S.trades.slice().sort((a,b)=>b.date.localeCompare(a.date));
+  const wins = tr.filter(t=>t.pnl>0), losses = tr.filter(t=>t.pnl<0);
+  const total = sum(tr,t=>t.pnl), wr = tr.length? wins.length/tr.length : 0;
+  const avgW = wins.length? sum(wins,t=>t.pnl)/wins.length : 0, avgL = losses.length? sum(losses,t=>t.pnl)/losses.length : 0;
+  let eq = 0; const curve = [0, ...tr.slice().reverse().map(t=>eq+=t.pnl)];
+  return `<section class="card" id="markets">
+    ${sectionHead('相場','Markets', `${tr.length} trades logged`)}
+    <div class="ringrow">
+      ${enso(wr, 100, `${Math.round(wr*100)}%`, 'win rate')}
+      <div style="flex:1;min-width:0">
+        <div class="label">Total P&amp;L</div>
+        <div class="big num ${total>=0?'pos':'neg'}">${signed(total)}</div>
+        ${spark(curve,{zero:true})}
+      </div>
+    </div>
+    <div class="stats" style="margin-top:18px">
+      <div class="stat"><div class="label">Avg win</div><div class="num pos">${signed(avgW)}</div></div>
+      <div class="stat"><div class="label">Avg loss</div><div class="num neg">${signed(avgL)}</div></div>
+      <div class="stat"><div class="label">W / L</div><div class="num">${wins.length} / ${losses.length}</div></div>
+      <div class="stat"><div class="label">Reward : risk</div><div class="num">${avgL? (avgW/Math.abs(avgL)).toFixed(2) : '—'}</div></div>
+    </div>
+    <div class="btns"><button class="btn red" data-act="addTrade">+ Log trade</button></div>
+    <div style="margin-top:14px">
+      ${tr.map(t=>`<div class="trade" data-act="editTrade" data-id="${t.id}">
+        <div><span class="tk">${esc(t.ticker)}</span> <span class="tag">${esc(t.market)}</span> <span class="tag">${esc(t.side)}</span></div>
+        <div class="pl ${t.pnl>=0?'pos':'neg'}">${signed(t.pnl)}</div>
+        <div class="meta">${fmtShort(t.date)} · ${num(t.entry)} → ${num(t.exit)} · ${num(t.qty)}</div><div></div>
+        ${t.lesson?`<div class="lesson">${esc(t.lesson)}</div>`:''}
+      </div>`).join('') || '<div class="empty">No trades yet. Plan the trade, trade the plan.</div>'}
+    </div>
+  </section>`;
+}
+const num = n => Number(n).toLocaleString('en-US',{maximumFractionDigits:4});
+
+function renderMoney(){
+  const m = S.money;
+  const tipsM = m.tips.filter(t=>monthKey(t.date)===THIS_MONTH);
+  const tipTotal = sum(tipsM,t=>t.amount);
+  const income = tipTotal + Number(m.wages||0);
+  const givenM = sum(m.giving.filter(g=>monthKey(g.date)===THIS_MONTH), g=>g.amount);
+  const giveGoal = income * (m.tithePct/100);
+  const budgetTot = sum(m.budget,b=>b.budget), spentTot = sum(m.budget,b=>b.spent);
+  const monthName = TODAY.toLocaleDateString('en-US',{month:'long'});
+  return `<section class="card" id="money">
+    ${sectionHead('財務','Money', monthName)}
+    <div class="stats">
+      <div class="stat"><div class="label">Tips · ${MON[TODAY.getMonth()]}</div><div class="big num">${money(tipTotal)}</div><div class="muted" style="font-size:12px">${tipsM.length} shifts · avg ${money(tipsM.length?tipTotal/tipsM.length:0)}</div></div>
+      <div class="stat"><div class="label">Income</div><div class="big num">${money(income)}</div><div class="muted" style="font-size:12px">tips + ${money(m.wages)} wages</div></div>
+      <div class="stat"><div class="label">Spent</div><div class="big num">${money(spentTot)}</div><div class="muted" style="font-size:12px">of ${money(budgetTot)} budget</div></div>
+      <div class="stat"><div class="label">Left</div><div class="big num ${income-spentTot-givenM<0?'neg':''}">${money(income-spentTot-givenM)}</div><div class="muted" style="font-size:12px">after giving</div></div>
+    </div>
+    <div class="cols two" style="margin-top:26px">
+      <div class="ringrow">${enso(m.saved/m.savingsGoal, 96, `${Math.round(m.saved/m.savingsGoal*100)}%`, 'saved', 'var(--gold)')}
+        <div><div class="label">${esc(m.savingsName)}</div><div class="num" style="font-size:20px">${money(m.saved)} <span class="muted">/ ${money(m.savingsGoal)}</span></div><button class="add" style="padding-left:0" data-act="moneyGoals">Edit</button></div></div>
+      <div class="ringrow">${enso(giveGoal? givenM/giveGoal : 0, 96, money(givenM), `of ${money(giveGoal)}`)}
+        <div><div class="label">Giving · ${m.tithePct}% tithe</div><div style="font-family:var(--serif);font-size:17px;line-height:1.25;margin-top:2px" class="dim">${givenM>=giveGoal?'First fruits given.':`${money(giveGoal-givenM)} to go this month`}</div><button class="add" style="padding-left:0" data-act="addGiving">+ Log giving</button></div></div>
+    </div>
+    <div class="sub-block" style="margin-top:28px">
+      <h3>Budget <button class="add" data-act="addBudget">+ Category</button></h3>
+      <ul class="list">${m.budget.map(b=>{ const over = b.spent > b.budget;
+        return `<li class="row tap" data-act="editBudget" data-id="${b.id}" style="display:block">
+          <div style="display:flex;justify-content:space-between;gap:10px"><span>${esc(b.name)}</span><span class="num ${over?'neg':'dim'}" style="font-size:13px">${money(b.spent)} / ${money(b.budget)}</span></div>
+          ${bar(b.budget? b.spent/b.budget : 0, over?'over':'soft')}
+        </li>`; }).join('')}</ul>
+    </div>
+    <div class="sub-block">
+      <h3>Recent tips <button class="add" data-act="addTip">+ Tips</button></h3>
+      <ul class="list">${m.tips.slice().sort((a,b)=>b.date.localeCompare(a.date)).slice(0,5).map(t=>`<li class="row tap" data-act="editTip" data-id="${t.id}"><span class="grow"><span class="t">${fmtShort(t.date)} <span class="muted">· ${esc(t.note||'')}</span></span></span><span class="num gold">${money(t.amount)}</span></li>`).join('')||'<li class="empty">No tips logged yet.</li>'}</ul>
+    </div>
+  </section>`;
+}
+
+function renderTraining(){
+  const t = S.training;
+  const ws = weekStart(TODAY);
+  const thisWeek = t.workouts.filter(w=>w.date>=ws && w.date<=T);
+  const bw = t.bodyweight.slice().sort((a,b)=>a.date.localeCompare(b.date));
+  const lastBW = bw[bw.length-1], firstBW = bw[0];
+  // workouts per week for the last 6 weeks
+  const weeks = Array.from({length:6},(_,k)=>{ const s = iso(addDays(parse(ws), -7*(5-k))), e = iso(addDays(parse(s),6)); return t.workouts.filter(w=>w.date>=s&&w.date<=e).length; });
+  return `<section class="card" id="training">
+    ${sectionHead('鍛錬','Training', 'Body as a temple')}
+    <div class="ringrow">
+      ${enso(thisWeek.length/t.weeklyGoal, 100, `${thisWeek.length}/${t.weeklyGoal}`, 'this week')}
+      <div style="flex:1;min-width:0">
+        <div class="label">Workouts / week · last 6</div>
+        <div style="display:flex;align-items:flex-end;gap:8px;height:58px;margin-top:10px">
+          ${weeks.map((n,k)=>`<div style="flex:1;display:grid;gap:4px;text-align:center"><div style="height:${Math.max(3,n/Math.max(t.weeklyGoal,...weeks)*46)}px;background:${k===5?'var(--red)':'rgba(236,228,212,.28)'};border-radius:1px"></div><span class="muted num" style="font-size:10px">${n}</span></div>`).join('')}
+        </div>
+      </div>
+    </div>
+    <div class="btns">
+      <button class="btn red" data-act="addWorkout">+ Workout</button>
+      <button class="btn" data-act="addLift">+ Lift</button>
+      <button class="btn" data-act="addBW">+ Weigh-in</button>
+      <button class="btn sm" data-act="trainGoals">Goal</button>
+    </div>
+    <div class="sub-block" style="margin-top:26px">
+      <h3>Lifts <span class="label">top set</span></h3>
+      <ul class="list">${t.lifts.map(l=>{ const e = l.entries.slice().sort((a,b)=>a.date.localeCompare(b.date)); const last = e[e.length-1], first = e[0], d = last && first ? last.weight-first.weight : 0;
+        return `<li class="row"><span class="grow"><span class="t">${esc(l.name)}</span><span class="s">${last?`${fmtShort(last.date)} · ${last.reps} reps`:'—'}</span></span>
+          <span style="text-align:right"><span class="num" style="font-size:19px">${last?num(last.weight):'—'}<span class="muted" style="font-size:12px"> lb</span></span><span class="s num ${d>0?'pos':''}" style="display:block;font-size:12px">${d>0?'+'+num(d)+' lb':''}</span></span></li>`; }).join('')}</ul>
+    </div>
+    <div class="sub-block">
+      <h3>Bodyweight <span class="label num">${lastBW?`${lastBW.weight} lb`:''}${lastBW&&firstBW?` · ${(lastBW.weight-firstBW.weight>0?'+':'')}${(lastBW.weight-firstBW.weight).toFixed(1)}`:''}</span></h3>
+      ${spark(bw.map(b=>b.weight))}
+      <div style="display:flex;justify-content:space-between" class="muted"><span style="font-size:11px">${firstBW?fmtShort(firstBW.date):''}</span><span style="font-size:11px">${lastBW?fmtShort(lastBW.date):''}</span></div>
+    </div>
+    <div class="sub-block">
+      <h3>Recent sessions</h3>
+      <ul class="list">${t.workouts.slice().sort((a,b)=>b.date.localeCompare(a.date)).slice(0,4).map(w=>`<li class="row tap" data-act="editWorkout" data-id="${w.id}"><span class="grow"><span class="t">${esc(w.type)}${w.notes?` <span class="muted">· ${esc(w.notes)}</span>`:''}</span><span class="s">${fmtShort(w.date)}</span></span><span class="num dim">${w.duration||''}${w.duration?' min':''}</span></li>`).join('')}</ul>
+    </div>
+  </section>`;
+}
+
+function renderFocus(){
+  const f = S.focus;
+  const done = f.priorities.filter(p=>p.done).length + (f.serve.done?1:0);
+  return `<section class="card span2" id="focus">
+    ${sectionHead('目標','This Week’s Focus', `Week of ${fmtShort(f.week)}`)}
+    <div class="cols two">
+      <div>
+        <div class="label" style="margin-bottom:6px">Top three</div>
+        ${f.priorities.map((p,i)=>`<div class="prio ${p.done?'done':''}"><span class="n">${['一','二','三'][i]}</span>
+          <div class="prio-in"><input type="text" value="${esc(p.text)}" data-focus="${i}" placeholder="Priority ${i+1}" aria-label="Priority ${i+1}">
+          <button class="chk ${p.done?'on':''}" data-act="prio" data-i="${i}" aria-label="Toggle priority ${i+1}">${tick}</button></div></div>`).join('')}
+      </div>
+      <div>
+        <div class="ringrow">
+          ${enso(done/4, 92, `${done}/4`, 'complete')}
+          <p style="font-family:var(--serif);font-size:19px;line-height:1.3" class="dim">Do fewer things, with your whole heart. Then serve someone.</p>
+        </div>
+        <div class="serve ${f.serve.done?'on':''}">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:10px">
+            <span class="label">奉仕 · One way I’ll serve</span>
+            <button class="chk ${f.serve.done?'on':''}" data-act="serve" aria-label="Toggle serve">${tick}</button>
+          </div>
+          <input type="text" value="${esc(f.serve.text)}" data-serve placeholder="Who can I serve this week?" aria-label="Serve">
+          <div class="muted" style="font-size:12px;margin-top:4px">Mark 10:45 — not to be served, but to serve.</div>
+        </div>
+      </div>
+    </div>
+  </section>`;
+}
+
+// ---------- modal forms ----------
+const dlg = document.getElementById('dlg'), dlgForm = document.getElementById('dlgForm');
+function form(title, fields, initial, onSave, onDelete){
+  const v = initial || {};
+  const f = fld => {
+    const val = v[fld.k] ?? fld.def ?? '';
+    let input;
+    if(fld.type==='select') input = `<select name="${fld.k}">${fld.opts.map(o=>`<option ${String(o)===String(val)?'selected':''}>${esc(o)}</option>`).join('')}</select>`;
+    else if(fld.type==='textarea') input = `<textarea name="${fld.k}" placeholder="${esc(fld.ph||'')}">${esc(val)}</textarea>`;
+    else input = `<input name="${fld.k}" type="${fld.type||'text'}" ${fld.type==='number'?'step="any" inputmode="decimal"':''} value="${esc(val)}" placeholder="${esc(fld.ph||'')}" ${fld.req?'required':''} ${fld.list?`list="dl-${fld.k}"`:''}>${fld.list?`<datalist id="dl-${fld.k}">${fld.list.map(o=>`<option value="${esc(o)}">`).join('')}</datalist>`:''}`;
+    return `<div class="field"><label>${fld.label}</label>${input}${fld.hint?`<span class="hint">${fld.hint}</span>`:''}</div>`;
+  };
+  const rows = []; for(let i=0;i<fields.length;i++){ const a = fields[i]; if(a.half && fields[i+1]?.half){ rows.push(`<div class="frow">${f(a)}${f(fields[i+1])}</div>`); i++; } else rows.push(f(a)); }
+  dlgForm.innerHTML = `<h3>${title}</h3>${rows.join('')}
+    <div class="mbtns">${onDelete?'<button type="button" class="btn sm del" data-m="del">Delete</button>':''}<button type="button" class="btn" data-m="cancel">Cancel</button><button type="submit" class="btn solid">Save</button></div>`;
+  dlgForm.onsubmit = e => {
+    e.preventDefault();
+    const out = {}; fields.forEach(fl => { const el = dlgForm.elements[fl.k]; let x = el.value; if(fl.type==='number') x = x===''? null : Number(x); out[fl.k] = x; });
+    onSave(out); dlg.close(); commit();
+  };
+  dlgForm.querySelector('[data-m=cancel]').onclick = () => dlg.close();
+  const del = dlgForm.querySelector('[data-m=del]'); if(del) del.onclick = () => { if(confirm('Delete this entry?')){ onDelete(); dlg.close(); commit(); } };
+  dlg.showModal();
+  setTimeout(()=>{ const first = dlgForm.querySelector('input:not([type=date]),textarea'); if(first && !initial) first.focus(); }, 30);
+}
+const upsert = (arr, item, id) => { if(id){ const i = arr.findIndex(x=>x.id===id); if(i>-1) arr[i] = {...arr[i], ...item}; } else arr.push({id:uid(), ...item}); };
+const remove = (arr, id) => { const i = arr.findIndex(x=>x.id===id); if(i>-1) arr.splice(i,1); };
+
+const F = {
+  event: [{k:'title',label:'Title',req:true,ph:'Dinner shift'},{k:'kind',label:'Type',type:'select',opts:['shift','event','church','gym','study']},{k:'date',label:'Date',type:'date',def:T,req:true},{k:'start',label:'Start',type:'time',half:true},{k:'end',label:'End',type:'time',half:true}],
+  request: [{k:'text',label:'Request',type:'textarea',req:true},{k:'who',label:'For',ph:'Me, Family, Work…',list:['Me','Family','Friend','Work','Church']}],
+  trade: [{k:'date',label:'Date',type:'date',def:T,half:true},{k:'ticker',label:'Ticker',req:true,ph:'MES',half:true},{k:'market',label:'Market',type:'select',opts:['Stock','Futures','Crypto','Options'],half:true},{k:'side',label:'Side',type:'select',opts:['Long','Short'],half:true},{k:'entry',label:'Entry',type:'number',half:true},{k:'exit',label:'Exit',type:'number',half:true},{k:'qty',label:'Size',type:'number',half:true},{k:'pnl',label:'P&L ($)',type:'number',half:true,hint:''},{k:'lesson',label:'Lesson learned',type:'textarea',ph:'What did the market teach me?'}],
+  tip: [{k:'date',label:'Date',type:'date',def:T,half:true},{k:'amount',label:'Tips ($)',type:'number',req:true,half:true},{k:'note',label:'Shift',list:['Lunch','Dinner','Double','Brunch']}],
+  giving: [{k:'date',label:'Date',type:'date',def:T,half:true},{k:'amount',label:'Amount ($)',type:'number',req:true,half:true},{k:'to',label:'Given to',def:'Tithe · church',list:['Tithe · church','Missions','Food bank','Someone in need']}],
+  budget: [{k:'name',label:'Category',req:true},{k:'budget',label:'Budget ($)',type:'number',half:true},{k:'spent',label:'Spent so far ($)',type:'number',half:true}],
+  workout: [{k:'date',label:'Date',type:'date',def:T,half:true},{k:'type',label:'Session',list:['Push','Pull','Legs','Upper','Lower','Full body','Cardio'],def:'Push',half:true},{k:'duration',label:'Minutes',type:'number',def:60},{k:'notes',label:'Notes',ph:'PR on incline, felt strong'}],
+};
+
+const actions = {
+  nextVerse(){ verseIdx = (verseIdx+1) % VERSES.length; render(); },
+  pray({slot}){ if(slot==='morning') toggleHabit(T,'pray'); else { const s = new Set(S.faith.prayers[T]||[]); s.has(slot)?s.delete(slot):s.add(slot); S.faith.prayers[T]=[...s]; } commit(); },
+  read(){ S.faith.planLog = S.faith.planLog||{}; S.faith.planLog[T] = S.faith.planDone; S.faith.planDone = Math.min(PLAN.length, S.faith.planDone+1); toggleHabit(T,'bible',true); commit('Reading marked. Well done.'); },
+  unread(){ if(S.faith.planLog && T in S.faith.planLog){ S.faith.planDone = S.faith.planLog[T]; delete S.faith.planLog[T]; toggleHabit(T,'bible',false); commit(); } },
+  saveJournal(){ const v = document.getElementById('journal').value.trim(); if(v) S.faith.journal[T] = v; else delete S.faith.journal[T]; commit('Reflection saved.'); },
+  church(){ const d = iso(addDays(TODAY,-TODAY.getDay())); const c = S.faith.church; const i = c.indexOf(d); i>-1 ? c.splice(i,1) : c.push(d); commit(); },
+  addRequest(){ form('Prayer request', F.request, null, v=>S.faith.requests.push({id:uid(), date:T, answered:false, ...v})); },
+  editRequest({id}){ const r = S.faith.requests.find(x=>x.id===id); form('Prayer request', F.request, r, v=>Object.assign(r,v), ()=>remove(S.faith.requests,id)); },
+  answer({id}){ const r = S.faith.requests.find(x=>x.id===id); r.answered = !r.answered; commit(r.answered?'Praise God.':''); },
+
+  addEvent(){ form('Add to schedule', F.event, null, v=>upsert(S.schedule, v)); },
+  editEvent({id}){ const e = S.schedule.find(x=>x.id===id); form('Edit', F.event, e, v=>upsert(S.schedule, v, id), ()=>remove(S.schedule,id)); },
+
+  habit({id}){ toggleHabit(T,id); commit(); },
+
+  addDeposit(){ form('Add to flight savings', [{k:'amount',label:'Amount ($)',type:'number',req:true},{k:'date',label:'Date',type:'date',def:T}], null, v=>S.flight.deposits.push({id:uid(),...v})); },
+  addHours(){ form('Log flight time', [{k:'date',label:'Date',type:'date',def:T,half:true},{k:'hours',label:'Hours',type:'number',req:true,half:true},{k:'note',label:'Notes',ph:'Pattern work · C172'}], null, v=>S.flight.log.push({id:uid(),...v})); },
+  flightGoals(){ form('Flight goals', [{k:'savingsGoal',label:'Savings goal for PPL ($)',type:'number'},{k:'hoursGoal',label:'Hours goal',type:'number',hint:'FAA minimum is 40; most students finish nearer 60–70.'}], S.flight, v=>Object.assign(S.flight,v)); },
+  toggleMs({id}){ const m = S.flight.milestones.find(x=>x.id===id); m.done=!m.done; commit(); },
+  toggleStudy({id}){ const m = S.flight.study.find(x=>x.id===id); m.done=!m.done; commit(); },
+  addStudy(){ form('Add study item', [{k:'text',label:'Topic',req:true}], null, v=>S.flight.study.push({id:uid(),done:false,...v})); },
+
+  addTrade(){ form('Log trade', F.trade, null, v=>S.trades.push({id:uid(), ...fixPnl(v)})); },
+  editTrade({id}){ const t = S.trades.find(x=>x.id===id); form('Edit trade', F.trade, t, v=>Object.assign(t, fixPnl(v)), ()=>remove(S.trades,id)); },
+
+  addTip(){ form('Log tips', F.tip, null, v=>S.money.tips.push({id:uid(),...v})); },
+  editTip({id}){ const t = S.money.tips.find(x=>x.id===id); form('Edit tips', F.tip, t, v=>Object.assign(t,v), ()=>remove(S.money.tips,id)); },
+  addGiving(){ form('Log giving', F.giving, null, v=>S.money.giving.push({id:uid(),...v})); },
+  addBudget(){ form('Budget category', F.budget, null, v=>S.money.budget.push({id:uid(),...v})); },
+  editBudget({id}){ const b = S.money.budget.find(x=>x.id===id); form('Edit category', F.budget, b, v=>Object.assign(b,v), ()=>remove(S.money.budget,id)); },
+  moneyGoals(){ form('Money settings', [{k:'savingsName',label:'Savings goal name'},{k:'savingsGoal',label:'Target ($)',type:'number',half:true},{k:'saved',label:'Saved so far ($)',type:'number',half:true},{k:'wages',label:'Hourly wages this month ($)',type:'number',half:true},{k:'tithePct',label:'Giving goal (%)',type:'number',half:true}], S.money, v=>Object.assign(S.money,v)); },
+
+  addWorkout(){ form('Log workout', F.workout, null, v=>{ S.training.workouts.push({id:uid(),...v}); if(v.date===T) toggleHabit(T,'gym',true); }); },
+  editWorkout({id}){ const w = S.training.workouts.find(x=>x.id===id); form('Edit workout', F.workout, w, v=>Object.assign(w,v), ()=>remove(S.training.workouts,id)); },
+  addLift(){ form('Log a lift', [{k:'name',label:'Lift',list:S.training.lifts.map(l=>l.name),req:true},{k:'weight',label:'Weight (lb)',type:'number',req:true,half:true},{k:'reps',label:'Reps',type:'number',def:5,half:true},{k:'date',label:'Date',type:'date',def:T}], null, v=>{
+      let l = S.training.lifts.find(x=>x.name.toLowerCase()===v.name.trim().toLowerCase());
+      if(!l){ l = {id:uid(), name:v.name.trim(), entries:[]}; S.training.lifts.push(l); }
+      l.entries.push({date:v.date, weight:v.weight, reps:v.reps}); }); },
+  addBW(){ form('Weigh-in', [{k:'weight',label:'Bodyweight (lb)',type:'number',req:true},{k:'date',label:'Date',type:'date',def:T}], null, v=>S.training.bodyweight.push({id:uid(),...v})); },
+  trainGoals(){ form('Training goal', [{k:'weeklyGoal',label:'Workouts per week',type:'number'}], S.training, v=>Object.assign(S.training,v)); },
+
+  prio({i}){ const p = S.focus.priorities[i]; p.done = !p.done; commit(); },
+  serve(){ S.focus.serve.done = !S.focus.serve.done; commit(S.focus.serve.done?'Well done, good and faithful servant.':''); },
+
+  export(){ const blob = new Blob([JSON.stringify(S,null,2)],{type:'application/json'}); const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `michi-backup-${T}.json`; a.click(); URL.revokeObjectURL(a.href); },
+  import(){ const inp = document.createElement('input'); inp.type='file'; inp.accept='application/json'; inp.onchange = async () => { try { S = JSON.parse(await inp.files[0].text()); commit('Data imported.'); } catch(e){ toast('That file could not be read.'); } }; inp.click(); },
+  reset(){ if(confirm('Replace everything with the sample data? Export first if you want a backup.')){ S = seed(); commit('Sample data restored.'); } },
+};
+function fixPnl(v){
+  if((v.pnl===null || v.pnl===undefined) && v.entry!=null && v.exit!=null && v.qty!=null){
+    v.pnl = +(((v.exit - v.entry) * v.qty) * (v.side==='Short'?-1:1)).toFixed(2);
+  }
+  v.pnl = v.pnl ?? 0; v.ticker = (v.ticker||'').toUpperCase();
+  return v;
+}
+
+// ---------- events ----------
+document.addEventListener('click', e => {
+  const el = e.target.closest('[data-act]');
+  if(!el || !actions[el.dataset.act]) return;
+  e.preventDefault();
+  actions[el.dataset.act](el.dataset);
+});
+document.addEventListener('change', e => {
+  if(e.target.matches('[data-focus]')){ S.focus.priorities[+e.target.dataset.focus].text = e.target.value; save(); toast('Saved.'); }
+  if(e.target.matches('[data-serve]')){ S.focus.serve.text = e.target.value; save(); toast('Saved.'); }
+});
+document.addEventListener('keydown', e => { if(e.key==='Enter' && e.target.matches('[data-focus],[data-serve]')) e.target.blur(); });
+// auto-save the journal as you type
+document.addEventListener('input', e => { if(e.target.id==='journal'){ clearTimeout(window.__jt); window.__jt = setTimeout(()=>{ const v = e.target.value.trim(); v ? S.faith.journal[T]=v : delete S.faith.journal[T]; save(); }, 600); } });
+
+let tt;
+function toast(msg){ if(!msg) return; const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(tt); tt = setTimeout(()=>t.classList.remove('show'), 1800); }
+function commit(msg){ save(); const y = window.scrollY; render(); window.scrollTo(0,y); toast(msg); }
+
+render();
+</script>
+</body>
+</html>
